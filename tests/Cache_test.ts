@@ -1,5 +1,5 @@
 import { assertEquals } from "@std/assert/equals";
-import { EventCache } from "../lib/Cache.ts";
+import { EventCache } from "../lib/EventCache.ts";
 import { assertAlmostEquals } from "@std/assert/almost-equals";
 import { TimeoutStrategy } from "../lib/EventStrategy/TimeoutStrategy.ts";
 import { IntervalStrategy } from "../lib/EventStrategy/IntervalStrategy.ts";
