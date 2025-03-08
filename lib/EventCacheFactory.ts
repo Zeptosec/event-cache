@@ -1,5 +1,7 @@
 import type { EventCache } from "./EventCache.ts";
 import { EventCacheBuilder } from "./EventCacheBuilder.ts";
+import { IntervalStrategy } from "./EventStrategy/IntervalStrategy.ts";
+import { TimeoutStrategy } from "./EventStrategy/TimeoutStrategy.ts";
 
 /** Factory for creating cache instances. */
 export class EventCacheFactory {
@@ -19,7 +21,7 @@ export class EventCacheFactory {
         }
 
         return new EventCacheBuilder<K, V>()
-            .withTimeoutStrategy(ttl, true)
+            .withStrategy(new TimeoutStrategy(ttl))
             .build();
     }
 
@@ -37,7 +39,7 @@ export class EventCacheFactory {
         }
 
         return new EventCacheBuilder<K, V>()
-            .withIntervalStrategy(ttl, true)
+            .withStrategy(new IntervalStrategy(ttl), true)
             .build();
     }
 }
