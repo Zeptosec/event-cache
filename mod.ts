@@ -4,10 +4,33 @@ import { CacheFactory } from "./lib/CacheFactory.ts";
 import { IntervalStrategy } from "./lib/EventStrategy/IntervalStrategy.ts";
 import { TimeoutStrategy } from "./lib/EventStrategy/TimeoutStrategy.ts";
 
-export default {
-    EventCache,
-    CacheBuilder,
-    CacheFactory,
-    IntervalStrategy,
-    TimeoutStrategy
-}
+/**
+ * A Map implementation that emits events when items expire.  Provides methods for setting, getting, deleting, and clearing cached items.  Supports expiration strategies via the `CacheBuilder`.
+ * @template K The type of the key.
+ * @template V The type of the value.
+ */
+export { EventCache };
+
+/**
+ * Builder for creating configurable instances of `EventCache`. Allows setting expiration strategies and delete-on-expire behavior.
+ * @template K The type of the key.
+ * @template V The type of the value.
+ */
+export { CacheBuilder };
+
+/**
+ * Factory for creating `EventCache` instances with various configuration options.  Simplifies cache creation.
+ */
+export { CacheFactory };
+
+/**
+ * A strategy for managing events at intervals.  Used within `EventCache` to handle item expiration.
+ * @template K The type of the key.
+ */
+export { IntervalStrategy };
+
+/**
+ * A strategy for managing events using timeouts. Used within `EventCache` to handle item expiration.
+ * @template K The type of the key.
+ */
+export { TimeoutStrategy };
