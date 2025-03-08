@@ -1,6 +1,6 @@
-import { EventCache } from "./lib/Cache.ts";
-import { CacheBuilder } from "./lib/CacheBuilder.ts";
-import { CacheFactory } from "./lib/CacheFactory.ts";
+import { EventCache } from "./lib/EventCache.ts";
+import { EventCacheBuilder } from "./lib/EventCacheBuilder.ts";
+import { EventCacheFactory } from "./lib/EventCacheFactory.ts";
 import { IntervalStrategy } from "./lib/EventStrategy/IntervalStrategy.ts";
 import { TimeoutStrategy } from "./lib/EventStrategy/TimeoutStrategy.ts";
 
@@ -16,12 +16,12 @@ export { EventCache };
  * @template K The type of the key.
  * @template V The type of the value.
  */
-export { CacheBuilder };
+export { EventCacheBuilder };
 
 /**
  * Factory for creating `EventCache` instances with various configuration options.  Simplifies cache creation.
  */
-export { CacheFactory };
+export { EventCacheFactory };
 
 /**
  * A strategy for managing events at intervals.  Used within `EventCache` to handle item expiration.
