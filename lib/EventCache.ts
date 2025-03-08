@@ -25,7 +25,7 @@ export type EventCacheProps<K> = {
     /** Whether to delete expired items from the cache. Defaults to `true`. */
     deleteOnExpire?: boolean,
     /** The strategy for managing event expiration. */
-    eventStrategy?: EventStrategy<K>
+    eventStrategy: EventStrategy<K>
 }
 
 /**
@@ -39,19 +39,16 @@ export class EventCache<K, V> extends EventEmitter<EventCacheEvents<K, V>> imple
     /** Whether to delete expired items from the cache. */
     private deleteOnExpire: boolean;
     /** The strategy for managing event expiration. */
-    private eventStrategy: EventStrategy<K> | undefined;
+    private eventStrategy: EventStrategy<K>;
 
     /**
      * Creates a new EventCache instance.
      * @param {EventCacheProps<K>} options - Configuration options for the cache.
      */
-    constructor({
-        deleteOnExpire = true,
-        eventStrategy
-    }: EventCacheProps<K> = {}) {
+    constructor(options: EventCacheProps<K>) {
         super()
-        this.deleteOnExpire = deleteOnExpire;
-        this.eventStrategy = eventStrategy;
+        this.deleteOnExpire = options.deleteOnExpire ?? true;
+        this.eventStrategy = options.eventStrategy;
     }
 
     /** Iterator for the cache. */
