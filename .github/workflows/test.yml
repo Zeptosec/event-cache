@@ -21,6 +21,7 @@ jobs:
         uses: denoland/setup-deno@v2
         with:
           deno-version: v2.x
+
       - run: echo "Deno version is ${{ steps.deno.outputs.deno-version }}"
 
       - name: Verify formatting
@@ -30,4 +31,12 @@ jobs:
         run: deno lint
 
       - name: Run tests
-        run: deno test -A
+        run: |
+          deno test -A --coverage
+          deno coverage --lcov > coverage.lcov
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage.lcov
