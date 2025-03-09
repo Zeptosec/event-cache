@@ -57,7 +57,6 @@ export class EventCache<K, V> implements Map<K, V> {
    * });
    *
    * const abortController = new AbortController()
-   * 
    * cache.addEventListener('expire', (event) => {
    *   const expiredItem = (event as CustomEvent<{ key: string; value: number }>).detail;
    *   console.log(`Item '${expiredItem.key}' expired. Value: ${expiredItem.value}`);
@@ -66,7 +65,6 @@ export class EventCache<K, V> implements Map<K, V> {
    * });
    *
    * cache.set('myKey', 123);
-   *
    * setTimeout(() => {
    *   console.log(cache.get('myKey')); // Access the value before expiration
    * }, 400);
