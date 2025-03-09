@@ -1,3 +1,7 @@
+![Tests](https://github.com/zeptosec/event-cache/actions/workflows/test.yml/badge.svg)
+![Publish](https://github.com/zeptosec/event-cache/actions/workflows/publish.yml/badge.svg)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](/LICENSE)
+
 # Event Cache
 
 A simple, efficient, and extensible in-memory cache with event-driven
