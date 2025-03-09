@@ -69,7 +69,7 @@ Deno.test("EventCacheBuilder: TimeoutStrategy event execution", async () => {
 
   const eventCache = builder.withStrategy(strategy).build();
 
-  eventCache.on("expire", () => {
+  eventCache.addEventListener("expire", () => {
     val = 1;
   });
 
@@ -89,7 +89,7 @@ Deno.test("EventCacheBuilder: IntervalStrategy event execution", async () => {
 
   const eventCache = builder.withStrategy(strategy).build();
 
-  eventCache.on("expire", () => {
+  eventCache.addEventListener("expire", () => {
     val = 1;
   });
 

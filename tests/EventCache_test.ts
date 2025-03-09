@@ -90,7 +90,7 @@ Deno.test("EventCache: Get event with timeout strategy when key expires", async 
   });
 
   await new Promise((r) => {
-    eventCache.on("expire", (event) => {
+    eventCache.addEventListener("expire", (event) => {
       assertEquals(event.key, "test1");
       assertEquals(event.value, 1);
       assertAlmostEquals(Date.now() - insertedAt, ttl, 25);
@@ -111,7 +111,7 @@ Deno.test("EventCache: Get event with interval strategy when key expires", async
   });
 
   await new Promise((r) => {
-    eventCache.on("expire", (event) => {
+    eventCache.addEventListener("expire", (event) => {
       assertEquals(event.key, "test1");
       assertEquals(event.value, 1);
       assertAlmostEquals(Date.now() - insertedAt, ttl, 25);
@@ -134,7 +134,7 @@ Deno.test("EventCache: Get event with interval strategy when key expired", async
   let value = 0;
 
   eventCache.set("test1", 1);
-  eventCache.on("expire", (event) => {
+  eventCache.addEventListener("expire", (event) => {
     data = event.key;
     value = event.value;
   });
@@ -255,4 +255,33 @@ Deno.test("EventCache: clearAll with interval strategy", () => {
   eventCache.set("test1", 1);
   eventCache.clear();
   assertEquals(eventCache.size, 0);
+});
+
+Deno.test("EventCache: remove event listener with AbortController", async () => {
+  const ttl = 200;
+  const intervalStrategy = new IntervalStrategy(ttl);
+  const eventCache = new EventCache<string, number>({
+    eventStrategy: intervalStrategy,
+  });
+
+  let val = 0;
+
+  eventCache.set("test", 42);
+
+  const abortController = new AbortController();
+  eventCache.addEventListener("expire", () => {
+    val = 1;
+  }, {
+    signal: abortController.signal,
+  });
+
+  await new Promise((r) => setTimeout(r, ttl - 50));
+
+  abortController.abort();
+
+  assertEquals(42, eventCache.get("test"));
+
+  await new Promise((r) => setTimeout(r, 100));
+
+  assertEquals(0, val);
 });
