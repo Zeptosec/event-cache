@@ -41,7 +41,7 @@ const abortController = new AbortController();
 timeoutCache.addEventListener("expire", (expiredItem) => {
   console.log(`Item '${expiredItem.key}' expired. Value: ${expiredItem.value}`);
 }, {
-  signal: abortController.signal
+  signal: abortController.signal,
 });
 
 timeoutCache.set("myKey", 123);
