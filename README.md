@@ -1,3 +1,7 @@
+![Tests](https://github.com/zeptosec/event-cache/actions/workflows/test.yml/badge.svg)
+![Publish](https://github.com/zeptosec/event-cache/actions/workflows/publish.yml/badge.svg)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](/LICENSE)
+
 # Event Cache
 
 A simple, efficient, and extensible in-memory cache with event-driven
@@ -31,8 +35,13 @@ const timeoutCache = EventCacheFactory.createEventCacheTimeout<string, number>(
   5000,
 ); // Items expire after 5 seconds
 
-timeoutCache.on("expire", (expiredItem) => {
+// Create AbortController for removing event listener if needed
+const abortController = new AbortController();
+
+timeoutCache.addEventListener("expire", (expiredItem) => {
   console.log(`Item '${expiredItem.key}' expired. Value: ${expiredItem.value}`);
+}, {
+  signal: abortController.signal
 });
 
 timeoutCache.set("myKey", 123);
@@ -45,6 +54,8 @@ setTimeout(() => {
 setTimeout(() => {
   console.log(`myKey (7000 ms): ${timeoutCache.get("myKey")}`);
   // Access the value after expiration
+
+  abortController.abort(); // Remove event listener
 }, 7000);
 
 // Interval-based expiration using IntervalStrategy
@@ -53,7 +64,7 @@ const intervalCache = EventCacheFactory.createEventCacheInterval<
   string
 >(2000); // Items are checked every 2 seconds
 
-intervalCache.on("expire", (expiredItem) => {
+intervalCache.addEventListener("expire", (expiredItem) => {
   console.log(`Item '${expiredItem.key}' expired. Value: ${expiredItem.value}`);
 });
 
@@ -83,7 +94,7 @@ const intervalCacheCustom = builder
     false,
   ).build();
 
-intervalCacheCustom.on("expire", (expiredItem) => {
+intervalCacheCustom.addEventListener("expire", (expiredItem) => {
   console.log(`Item '${expiredItem.key}' expired. Value: ${expiredItem.value}`);
 });
 
@@ -110,7 +121,7 @@ const eventCache = new EventCache<number, string>({
 
 eventCache.set(42, "answer");
 
-eventCache.on("expire", ({ key, value }) => {
+eventCache.addEventListener("expire", ({ key, value }) => {
   console.log(`expired: ${key}: ${value}`);
 });
 

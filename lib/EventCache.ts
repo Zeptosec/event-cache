@@ -1,4 +1,3 @@
-import { EventEmitter } from "node:events";
 import type { EventStrategy } from "./EventStrategy/TimeoutStrategy.ts";
 
 /**
@@ -11,10 +10,10 @@ export type EventCacheEvents<K, V> = {
    * Emitted when an item expires.
    * @param {key: K, value: V} The key and value of the expired item.
    */
-  expire: [{
+  expire: {
     key: K;
     value: V;
-  }];
+  };
 };
 
 /**
@@ -34,14 +33,15 @@ export type EventCacheProps<K> = {
  * @template K The type of the key.
  * @template V The type of the value.
  */
-export class EventCache<K, V> extends EventEmitter<EventCacheEvents<K, V>>
-  implements Map<K, V> {
+export class EventCache<K, V> implements Map<K, V> {
   /** The underlying Map storing the cached data. */
   private cache: Map<K, V> = new Map();
   /** Whether to delete expired items from the cache. */
   private deleteOnExpire: boolean;
   /** The strategy for managing event expiration. */
   private eventStrategy: EventStrategy<K>;
+  /** The event target for dispatching events. */
+  private eventTarget: EventTarget = new EventTarget();
 
   /**
    * Creates a new EventCache instance.
@@ -53,26 +53,31 @@ export class EventCache<K, V> extends EventEmitter<EventCacheEvents<K, V>>
    *
    * const cache = new EventCache({
    *   deleteOnExpire: true,
-   *   eventStrategy: new TimeoutStrategy(5000) //Items expire after 5 seconds
+   *   eventStrategy: new TimeoutStrategy(500) //Items expire after 5 seconds
    * });
    *
-   * cache.on('expire', (expiredItem) => {
+   * const abortController = new AbortController()
+   * 
+   * cache.addEventListener('expire', (event) => {
+   *   const expiredItem = (event as CustomEvent<{ key: string; value: number }>).detail;
    *   console.log(`Item '${expiredItem.key}' expired. Value: ${expiredItem.value}`);
+   * }, {
+   *   signal: abortController.signal
    * });
    *
    * cache.set('myKey', 123);
    *
    * setTimeout(() => {
    *   console.log(cache.get('myKey')); // Access the value before expiration
-   * }, 3000);
+   * }, 400);
    *
    * setTimeout(() => {
    *   console.log(cache.get('myKey')); // Access the value after expiration (should be undefined if deleteOnExpire is true)
-   * }, 7000);
+   *   abortController.abort(); // Remove event listener
+   * }, 600);
    * ```
    */
   constructor(options: EventCacheProps<K>) {
-    super();
     this.deleteOnExpire = options.deleteOnExpire ?? true;
     this.eventStrategy = options.eventStrategy;
   }
@@ -93,10 +98,17 @@ export class EventCache<K, V> extends EventEmitter<EventCacheEvents<K, V>>
   /** Adds an event to the event strategy. */
   private addEvent(key: K, value: V): void {
     this.eventStrategy?.set(key, () => {
-      this.emit("expire", {
-        key: key,
-        value: value,
-      });
+      const event = new CustomEvent<EventCacheEvents<K, V>["expire"]>(
+        "expire",
+        {
+          detail: {
+            key: key,
+            value: value,
+          },
+        },
+      );
+
+      this.eventTarget.dispatchEvent(event);
 
       if (this.deleteOnExpire) {
         this.delete(key);
@@ -188,5 +200,24 @@ export class EventCache<K, V> extends EventEmitter<EventCacheEvents<K, V>>
    */
   public forEach(callback: (value: V, key: K, map: Map<K, V>) => void): void {
     this.cache.forEach((value, key) => callback(value, key, this));
+  }
+
+  /**
+   * Adds an event listener to the EventCache.
+   * @param type - The event type to listen for.
+   * @param listener - The event listener callback.
+   * @param options - Optional event listener options.
+   */
+  public addEventListener<T extends keyof EventCacheEvents<K, V>>(
+    type: T,
+    listener: (event: EventCacheEvents<K, V>[T]) => void,
+    options?: boolean | AddEventListenerOptions,
+  ): void {
+    this.eventTarget.addEventListener(
+      type,
+      (event) =>
+        listener((event as CustomEvent<EventCacheEvents<K, V>[T]>).detail),
+      options,
+    );
   }
 }
