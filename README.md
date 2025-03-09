@@ -1,4 +1,5 @@
 ![Tests](https://github.com/zeptosec/event-cache/actions/workflows/test.yml/badge.svg)
+[![codecov](https://codecov.io/gh/Zeptosec/event-cache/graph/badge.svg?token=QEGCXKRS8P)](https://codecov.io/gh/Zeptosec/event-cache)
 ![Publish](https://github.com/zeptosec/event-cache/actions/workflows/publish.yml/badge.svg)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](/LICENSE)
 
