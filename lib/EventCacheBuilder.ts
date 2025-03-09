@@ -32,6 +32,20 @@ export interface EventCacheBuilderReady<K, V> {
  * Builder class for creating instances of `EventCache`.
  * @template K The type of the key used to identify events.
  * @template V The type of the value associated with each event.
+ * 
+ * @example
+ * ```typescript
+ * import { EventCacheBuilder, IntervalStrategy } from "./EventCacheBuilder";
+ * 
+ * const builder = new EventCacheBuilder<number, string>();
+ * const cache = builder.withStrategy(new IntervalStrategy(2000), false).build(); // Items checked every 2 seconds, not deleted on expire
+ * 
+ * cache.set(1, "test");
+ * 
+ * setTimeout(() => {
+ *   console.log(cache.get(1)); // Value should still be present even after expiration
+ * }, 3000);
+ * ```
  */
 export class EventCacheBuilder<K, V> implements EventCacheBuilderStrategy<K, V> {
 

@@ -3,7 +3,22 @@ import { EventCacheBuilder } from "./EventCacheBuilder.ts";
 import { IntervalStrategy } from "./EventStrategy/IntervalStrategy.ts";
 import { TimeoutStrategy } from "./EventStrategy/TimeoutStrategy.ts";
 
-/** Factory for creating cache instances. */
+
+/**
+ * Factory for creating cache instances. Items are removed from the cache when they expire.
+ * @example
+ * ```typescript
+ * import { EventCacheFactory } from "./EventCacheFactory";
+ * 
+ * // create EventCache with timeout strategy
+ * const timeoutCache = EventCacheFactory.createEventCacheTimeout<string, number>(5000); // Items expire after 5 seconds
+ * timeoutCache.set('myKey', 123);
+ * 
+ * // create EventCache with interval strategy
+ * const intervalCache = EventCacheFactory.createEventCacheInterval<string, string>(2000); // Items checked every 2 seconds
+ * intervalCache.set('myKey', 'hello');
+ * ```
+ */
 export class EventCacheFactory {
 
     /**

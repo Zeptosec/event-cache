@@ -30,6 +30,7 @@ export type EventCacheProps<K> = {
 
 /**
  * A Map implementation that emits events when items expire.
+ * 
  * @template K The type of the key.
  * @template V The type of the value.
  */
@@ -44,6 +45,30 @@ export class EventCache<K, V> extends EventEmitter<EventCacheEvents<K, V>> imple
     /**
      * Creates a new EventCache instance.
      * @param {EventCacheProps<K>} options - Configuration options for the cache.
+     * @example
+     * ```typescript
+     * import { EventCache } from "./EventCache";
+     * import { TimeoutStrategy } from "./EventStrategy/TimeoutStrategy";
+     * 
+     * const cache = new EventCache({
+     *   deleteOnExpire: true,
+     *   eventStrategy: new TimeoutStrategy(5000) //Items expire after 5 seconds
+     * });
+     * 
+     * cache.on('expire', (expiredItem) => {
+     *   console.log(`Item '${expiredItem.key}' expired. Value: ${expiredItem.value}`);
+     * });
+     * 
+     * cache.set('myKey', 123);
+     * 
+     * setTimeout(() => {
+     *   console.log(cache.get('myKey')); // Access the value before expiration
+     * }, 3000);
+     * 
+     * setTimeout(() => {
+     *   console.log(cache.get('myKey')); // Access the value after expiration (should be undefined if deleteOnExpire is true)
+     * }, 7000);
+     * ```
      */
     constructor(options: EventCacheProps<K>) {
         super()
