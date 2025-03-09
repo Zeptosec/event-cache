@@ -3,6 +3,8 @@
 [![JSR](https://jsr.io/badges/@zeptosec/event-cache)](https://jsr.io/@zeptosec/event-cache)
 ![Publish](https://github.com/zeptosec/event-cache/actions/workflows/publish.yml/badge.svg)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](/LICENSE)
+![GitHub last commit (branch)](https://img.shields.io/github/last-commit/zeptosec/event-cache/main)
+
 
 # Event Cache
 
