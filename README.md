@@ -5,7 +5,6 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](/LICENSE)
 ![GitHub last commit (branch)](https://img.shields.io/github/last-commit/zeptosec/event-cache/main)
 
-
 # Event Cache
 
 A simple, efficient, and extensible in-memory cache with event-driven
