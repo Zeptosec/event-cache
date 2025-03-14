@@ -7,10 +7,95 @@
 
 # Event Cache
 
-A simple, efficient, and extensible in-memory cache with event-driven
-expiration. This library provides a flexible caching solution for managing data
-with time-based or interval-based expiration, triggering events when items
-expire.
+The main purpose of this libary is to store key-value pairs while also managing
+the expiration of those entries and emitting events when items expire. This is
+useful for scenarios where you need a cache that automatically removes stale
+data and notifies other parts of your application when that happens.
+
+# Library description
+
+## Provided functions
+
+A table documenting all public methods of each class
+
+### EventCache class
+
+| Method Name      | Parameters                                                                                                                                                                          | Description                                                                                                                                   |
+| ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| constructor      | `options: EventCacheProps<K> - deleteOnExpire?: boolean`: Whether to delete expired items (defaults to `true`). - `eventStrategy: EventStrategy<K>`: The event expiration strategy. | Initializes a new EventCache instance, setting the deleteOnExpire option and the eventStrategy.                                               |
+| set              | `key: K` `value: V`. `key`: The key to add/update in the cache. `value`: The value to store associated with the key.                                                                | Adds or updates a key-value pair in the cache. It also manages the expiration event for the item. Returns `this` (the `EventCache` instance). |
+| delete           | `key: K`. The key to remove from the cache.                                                                                                                                         | Removes a key-value pair from the cache and the associated expiration event. Returns `true` if an item was removed, false otherwise.          |
+| get              | `key: K`. The key to retrieve from the cache.                                                                                                                                       | Retrieves the value associated with the given key. Returns the value if found, `undefined` otherwise.                                         |
+| clear            | None                                                                                                                                                                                | Clears all key-value pairs from the cache and removes all expiration events.                                                                  |
+| size             | None                                                                                                                                                                                | A getter that returns the number of items currently in the cache.                                                                             |
+| entries          | Returns an iterator of `[key, value]` pairs for each entry in the cache                                                                                                             | Returns an iterator of `[key, value]` pairs for each entry in the cache.                                                                      |
+| keys             | None                                                                                                                                                                                | Returns an iterator of keys for each entry in the cache.                                                                                      |
+| values           | None                                                                                                                                                                                | Returns an iterator of values for each entry in the cache.                                                                                    |
+| has              | `key: K`. The key to check for.                                                                                                                                                     | Checks if the cache contains a key. Returns `true` if the key exists, `false` otherwise.                                                      |
+| forEach          | `callback: (value: V, key: K, map: Map<K, V>) => void` A function to execute for each key-value pair. It receives the value, key, and the map as arguments.                         | Iterates over each key-value pair in the cache and executes the provided callback function.                                                   |
+| addEventListener | `type: T extends keyof EventCacheEvents<K, V> listener: (event: EventCacheEvents<K, V>[T]) => void` options?: boolean                                                               | A function that will be called when an item in a cache expires.                                                                               |
+
+## Business problems that library solves
+
+This library helps to solve several business problems related to caching and
+event management:
+
+- **Managing expired data:** Many applications need to cache data for
+  permormance, but that data often has a limited lifespan. This library
+  automates removal of old data while still working as a cache.
+- **Event based notifications:** Provides a convenient way of knowing when data
+  becomes outdated through events.
+- **Flexible expiration strategies:** For better performance there's `interval`
+  based strategy which can handle many more events. For more accuracy there's
+  `timeout` based strategy.
+
+## Intended use
+
+This library is intended for use in applications that requires caching with data
+expiration.
+
+- **Real-time data:** frequently updated data, such as price discounts, weather
+  information. Once data expires it can easily be updated again when event is
+  received.
+- **Rate-limiting:** Caching responses from APIs with rate limits. It can cache
+  frequently fetched responses so that the database isn't used on every request.
+- **Web applications:** Caching frequently used data to improve performance and
+  user expirience. Caching API responses on the front end.
+
+This library is useful in any situation where data needs to be cached for
+performance while expired data is removed.
+
+## Restrictions for library usage
+
+Here are outlined the main restrictions for using the library
+
+### Technical restrictions
+
+- **Event Listener Management:** `addEventListener` provides a way to attach an
+  event to an object to receive events after the data expired. This event should
+  be removed with `AbortController` after it is no longer needed.
+- **Implementation limitations:** `EventCache` triggers events asynchronously.
+  This means that expiration events are not guaranteed to happen **exactly** at
+  specified time. Slight delays should be expected.
+
+### Business restrictions
+
+- **Expiry requirement:** This libary is primarily for caching data that will
+  expire. If your data never expires then a simpler caching solutions might be
+  more appropriate.
+
+- **Data sensitivy:** This library doesn't provide any data encryption. It is
+  stored as provided.
+
+## Other important information
+
+### Performance
+
+The performance of event cache is directly related to `EventStrategy`. So it is
+very important to choose event strategy that you need. `IntervalStrategy` is
+more performant, but events may not be received on time. `TimeoutStrategy`
+should be more accurate than `IntervalStrategy`, but it may consume more memory
+when there's a lot of data.
 
 ## Features
 
