@@ -1,6 +1,6 @@
 {
   "name": "@zeptosec/event-cache",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "exports": "./mod.ts",
   "license": "MIT",
   "tasks": {
