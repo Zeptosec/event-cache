@@ -1,6 +1,7 @@
 ![Tests](https://github.com/zeptosec/event-cache/actions/workflows/test.yml/badge.svg)
 [![codecov](https://codecov.io/gh/Zeptosec/event-cache/graph/badge.svg?token=QEGCXKRS8P)](https://codecov.io/gh/Zeptosec/event-cache)
 [![JSR](https://jsr.io/badges/@zeptosec/event-cache)](https://jsr.io/@zeptosec/event-cache)
+[![NPM Version](https://img.shields.io/npm/v/%40riposte%2Fevent-cache)](https://www.npmjs.com/package/@riposte/event-cache)
 ![Publish](https://github.com/zeptosec/event-cache/actions/workflows/publish.yml/badge.svg)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](/LICENSE)
 ![GitHub last commit (branch)](https://img.shields.io/github/last-commit/zeptosec/event-cache/main)
