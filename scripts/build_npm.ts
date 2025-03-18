@@ -15,7 +15,7 @@ await build({
   package: {
     // package.json properties
     name: "@riposte/event-cache",
-    version: Deno.args[0],
+    version: Deno.args[0]?.replace(/^v/, ""),
     description: "Event-emitting cache with timeout & interval expiration.",
     license: "MIT",
     repository: {
