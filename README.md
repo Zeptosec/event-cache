@@ -111,6 +111,13 @@ when there's a lot of data.
 - **Extensible:** Easily create custom expiration strategies.
 - **Simple API:** Easy to use and integrate into your projects.
 
+## Class diagram
+
+Below is the class diagram illustrating the architecture of the Event Cache
+library.
+
+[![Class diagram](./assets/class_diagram.jpg)](./assets/class_diagram.jpg)
+
 ## Examples
 
 The `EventCacheFactory` provides convenient methods to create caches with
