@@ -29,17 +29,17 @@ export class IntervalStrategy<K> implements EventStrategy<K> {
 
   /**
    * The time-to-live (TTL) for each event, in milliseconds.
-   * @private
+   * @public
    * @readonly
    */
-  private readonly ttl: number;
+  public readonly ttl: number;
 
   /**
    * The delay between each interval, in milliseconds.
-   * @private
+   * @public
    * @readonly
    */
-  private readonly intervalDelay: number;
+  public readonly intervalDelay: number;
 
   /**
    * Creates a new IntervalStrategy instance.
