@@ -231,3 +231,26 @@ setTimeout(() => {
   // value is still defined
 }, 2000);
 ```
+
+## Analysis of alternative packages
+
+There are many different packages for caching data and receiving event when it
+expires.
+
+[@cacheable](https://www.npmjs.com/package/cacheable) has more features and is
+very popular.
+
+[@cache-manager](https://www.npmjs.com/package/cache-manager) Similar to
+[@cacheable](https://www.npmjs.com/package/cacheable) has a lot of different
+functionality for managing the cache like emitting event when key is set or
+deleted.
+
+[@node-cache](https://www.npmjs.com/package/node-cache) Also very popular
+package with the similar functionaly and many more features.
+
+[@buffered-queue](https://www.npmjs.com/package/buffered-queue) stores a list of
+items and then after specified time returns an event with all the data in the
+queue or if the size limit is reached.
+
+So there are many other packages to choose from if you find that this pacakage
+is lacking some features that you need.
